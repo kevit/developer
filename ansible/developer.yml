@@ -1,0 +1,8 @@
+---
+- name: Deploy developer environment
+  hosts: "{{ hostsvar | default('all') }}"
+  gather_facts: true
+  remote_user: root
+  tasks:
+    - name: Include system based tasks
+      include: tasks/main.yml
