@@ -1,5 +1,11 @@
 ---
 - name: Deploy developer environment
+  vars:
+    docker_opts: []
+    docker_env: []
+    #      HTTP_PROXY: "http://127.0.0.1:8080"
+    #  HTTPS_PROXY: "https://127.0.0.1:8080"
+
   hosts: "{{ hostsvar | default('all') }}"
   gather_facts: true
   remote_user: root

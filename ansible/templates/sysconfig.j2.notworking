@@ -1,0 +1,4 @@
+DOCKER_OPTS="{{ docker_opts }}"
+{% for k,v in docker_env.iteritems() %}
+{{ k }}="{{ v }}"
+{%endfor%}
