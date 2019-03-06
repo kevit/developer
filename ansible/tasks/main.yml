@@ -1,27 +1,68 @@
 ---
-- name: "Load variables based on OS family"
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "main.yml"
+- name: check for centos 7
+  fail:
+    msg: >-
+        Docker CE requires CentOS 7. Please use the `centos6` branch of this
+        role to deploy on CentOS 6 with docker-engine. For more info visit
+        https://github.com/DavidWittman/ansible-docker/blob/master/README.md#centos-6-support
 
-- name: "Install requirements"
-  package:
-    name: "{{ required_packages }}"
+  when: ansible_distribution_major_version != "7"
+
+- name: add docker main repository
+  copy:
+    src: docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: create systemd override directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+# - name: add systemd override
+#  copy:
+#    src: override.conf
+#    dest: /etc/systemd/system/docker.service.d/override.conf
+
+- name: install docker
+  yum:
+    name: docker-ce
     state: present
-  register: status
-  retries: 10
-  delay: 2
-  until: status is success
-  become: true
-  when: (required_packages | default([])) | length > 0
 
-- name: "Choose platform based task"
-  include_tasks: "{{ platform }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_facts.system }}.yml"
-    - "unsupported.yml"
-  loop_control:
-    loop_var: platform
+# - name: create sysconfig file
+#  template:
+#    src: sysconfig.j2
+#    dest: /etc/sysconfig/docker
+
+- name: start and enable docker
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: installing libvirt
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - libguestfs-tools
+    - libvirt
+    - qemu-kvm
+    - virt-manager
+    - virt-install
+    - virt-viewer
+    - libguestfs-xfs
+    - rhel-guest-image-7
+
+- name: enable libvirtd service
+  service:
+    name: libvirtd
+    enabled: true
+    state: started
+
+- name: installing software
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - vagrant
+    - vagrant-libvirt
