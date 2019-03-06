@@ -8,36 +8,36 @@
 
   when: ansible_distribution_major_version != "7"
 
-- name: add docker main repository
-  copy:
-    src: docker-ce.repo
-    dest: /etc/yum.repos.d/docker-ce.repo
-
-- name: create systemd override directory
-  file:
-    path: /etc/systemd/system/docker.service.d
-    state: directory
-
+# - name: add docker main repository
+#   copy:
+#     src: docker-ce.repo
+#     dest: /etc/yum.repos.d/docker-ce.repo
+# 
+# - name: create systemd override directory
+#   file:
+#     path: /etc/systemd/system/docker.service.d
+#     state: directory
+# 
 # - name: add systemd override
 #  copy:
 #    src: override.conf
 #    dest: /etc/systemd/system/docker.service.d/override.conf
 
-- name: install docker
-  yum:
-    name: docker-ce
-    state: present
-
+# - name: install docker
+#   yum:
+#     name: docker-ce
+#     state: present
+# 
 # - name: create sysconfig file
 #  template:
 #    src: sysconfig.j2
 #    dest: /etc/sysconfig/docker
 
-- name: start and enable docker
-  service:
-    name: docker
-    state: started
-    enabled: true
+# - name: start and enable docker
+#   service:
+#     name: docker
+#     state: started
+#     enabled: true
 
 - name: installing libvirt
   yum:

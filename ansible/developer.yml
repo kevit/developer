@@ -10,5 +10,9 @@
   gather_facts: true
   remote_user: root
   tasks:
+    - name: setup proxy
+      lineinfile:
+        path: /etc/yum.conf
+        line: 'proxy=http://proxy.cc.absee.azt.cloud.allianz:8080'
     - name: Include system based tasks
       include: tasks/main.yml
