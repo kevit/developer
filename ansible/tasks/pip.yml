@@ -1,0 +1,19 @@
+---
+- name: Upgrade pip to the last version
+  pip:
+    name: pip
+    virtualenv: ~/.pythonenvs/molecule
+    virtualenv_command: /usr/bin/python3.7 -m venv
+
+- name: Install pip packages
+  pip:
+    name: "{{ item }}"
+    virtualenv: ~/.pythonenvs/molecule
+    virtualenv_command: /usr/bin/python3.7 -m venv
+  with_items:
+    - molecule
+    - ansible
+    - docker-py
+    - python-vagrant
+    - cookiecutter
+    - yamllint
