@@ -22,6 +22,8 @@ provisioner:
     name: ansible-lint
     options:
       R: true
+      x:
+        - ANSIBLE0010
   playbooks:
     converge: ../../developer.yml
 scenario:
