@@ -1,15 +1,23 @@
 ---
 - name: Upgrade pip to the last version
+  become: false
   pip:
     name: pip
     virtualenv: ~/.pythonenvs/molecule
     virtualenv_command: /usr/bin/python3.7 -m venv
+  environment:
+    http_proxy: "http://proxy.cc.absee.azt.cloud.allianz:8080"
+    https_proxy: "http://proxy.cc.absee.azt.cloud.allianz:8080"
 
 - name: Install pip packages
+  become: false
   pip:
     name: "{{ item }}"
     virtualenv: ~/.pythonenvs/molecule
     virtualenv_command: /usr/bin/python3.7 -m venv
+  environment:
+    http_proxy: "http://proxy.cc.absee.azt.cloud.allianz:8080"
+    https_proxy: "http://proxy.cc.absee.azt.cloud.allianz:8080"
   with_items:
     - molecule
     - ansible
@@ -17,3 +25,4 @@
     - python-vagrant
     - cookiecutter
     - yamllint
+    - libselinux-python
